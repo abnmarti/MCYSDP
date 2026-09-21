@@ -1,0 +1,3 @@
+group_id=group06
+token_order=KEYPAD,PID,DNS,SAFE
+hmac_key=2f3ecf07984996eec9d4ad11040ebc3fad02101b708968772b3682233ae09be5
