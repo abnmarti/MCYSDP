@@ -20,6 +20,10 @@ def parse(line):
     time_stamp, lab, pid, status, user, ip_address, port, protocol = m.group()
 
 
+<<<<<<< HEAD
 print(888888)
 
  
+=======
+print(5)
+>>>>>>> 24a8a8f (test)
