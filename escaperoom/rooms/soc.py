@@ -1,3 +1,12 @@
+#Step 1: Read and Parse the Log File, For each line, we validate if it matches the exact required format
+"""exact required format:
+<TIMESTAMP> <HOST> sshd[<PID>]: <Failed|Accepted> password for <USER> from <IPv4> port <PORT> protocol 2"""
+#Step 2: Extract Data from Valid Lines (valid Failed password record)
+#Step 3: Find the Winning /24
+#Step 4: Find the Most Frequent IP
+#Step 5: Generate the KEYPAD
+#Step 6: Output the Required Evidence
+
 import re
 
 ssh_reg = re.compile(
