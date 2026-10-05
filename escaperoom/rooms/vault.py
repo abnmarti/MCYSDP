@@ -2,7 +2,6 @@ from dataclasses import dataclass
 import re
 from ..utils import PATH_VAULT
 from .base import Room
-import time
 @dataclass
 class Vaultcandidate:
     matchedString: str
@@ -11,7 +10,6 @@ class Vaultcandidate:
     c: int
 
 safe_reg = re.compile(r'\bSAFE\s*\{(\s*\d+\s*)\-(\s*\d+\s*)\-(\s*\d+\s*)\}')
-
 
 def read_file():
     with open(PATH_VAULT, 'r') as f: 
@@ -23,7 +21,6 @@ def extract_all_candidates(content):
     for match in safe_reg.finditer(content):
         a, b, c = map(int, match.groups())
         candidates.append(Vaultcandidate(matchedString=match.group(0), a=a, b=b, c=c))
-
     return candidates
 
 
@@ -36,8 +33,8 @@ def get_candidate():
     candidates = extract_all_candidates(content)
     for candidate in candidates: 
         if is_valid_candidate(candidate):
-            return candidate.matchedString
-
+            return candidate
+    return None
 
 class VaultRoom(Room):
     def __init__(self): 
@@ -49,4 +46,12 @@ class VaultRoom(Room):
     
     def inspect(self):
         print("[Room Vault] Scanning dump...")
-        print(f"Found candidate: {get_candidate()}")
+        candidate = get_candidate()
+        if is_valid_candidate(candidate):
+            print(f"Found candidate: {candidate.matchedString}")
+        else:
+            raise ValueError(f"Invalid candidate: {candidate.matchedString}")
+        print(f"Checksum: {candidate.a}+{candidate.b}={candidate.c} (OK)")
+        print(f"TOKEN[SAFE]={candidate.a}-{candidate.b}-{candidate.c}")
+        print(f'EVIDENCE[SAFE].MATCH="{candidate.matchedString}"')
+        print(f"EVIDENCE[SAFE].CHECK={candidate.a}+{candidate.b}={candidate.c}")
