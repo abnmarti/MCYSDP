@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from rooms.vault import VaultRoom
 
 @dataclass
 class GameState:
@@ -6,4 +7,5 @@ class GameState:
     inventory: set[str] = field(default_factory=set)
     tokens: dict[str, str] = field(default_factory=dict)
     evidence: dict = field(default_factory=dict)
+
 

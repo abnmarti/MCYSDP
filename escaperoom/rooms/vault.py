@@ -9,7 +9,7 @@ class Vaultcandidate:
     b: int
     c: int
 
-safe_reg = re.compile(r'(\bSAFE)\s*\{(\s*\d+\s*)\-(\s*\d+\s*)\-(\s*\d+\s*)\}')
+safe_reg = re.compile(r'\bSAFE\s*\{(\s*\d+\s*)\-(\s*\d+\s*)\-(\s*\d+\s*)\}')
 
 def read_file():
     with open(PATH_VAULT, 'r') as f: 
