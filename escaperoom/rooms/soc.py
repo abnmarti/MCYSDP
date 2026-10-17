@@ -55,7 +55,6 @@ def read_file(input_file):
             # # Extract data and perform strict validation
             if match.group('status').upper() == 'FAILED':
                 ip = match.group('ip')
-                ts = match.group('timestamp')
                     
                 # Requirement: IP must be valid
                 if not is_valid_ipv4(ip):
