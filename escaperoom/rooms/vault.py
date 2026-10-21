@@ -72,7 +72,7 @@ def solve_vault(data_dir):
                     valid_candidates.append(candidate)
 
     if len(valid_candidates) != 1:
-        raise ValueError("Expected exactly one valid SAFE code")
+        raise ValueError("Need 1 valid SAFE code")
 
     candidate = valid_candidates[0]
 
