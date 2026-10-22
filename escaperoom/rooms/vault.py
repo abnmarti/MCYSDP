@@ -51,13 +51,3 @@ def solve_vault(data_dir: Path) -> PuzzleResult:
             "CHECK": f"{candidate.a}+{candidate.b}={candidate.c}",
         },
     )
-
-if __name__ == "__main__":
-    from escaperoom.utils import DATA_PATH
-    result = solve_vault(DATA_PATH)
-    print("[Room Vault] Scanning dump...")
-    print(f"Found candidate: {result.evidence["MATCH"]}")
-    print(f"Checksum: {result.evidence["CHECK"]} (OK)")
-    print(f"TOKEN[SAFE]={result.token_value}")
-    print(f'EVIDENCE[SAFE].MATCH="{result.evidence["MATCH"]}"')
-    print(f"EVIDENCE[SAFE].CHECK={result.evidence["CHECK"]}")
