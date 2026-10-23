@@ -8,6 +8,8 @@
 
 import re
 import ipaddress
+from escaperoom.models import PuzzleResult
+from pathlib import Path
 from collections import Counter
 from ..utils import PATH_AUTH
 
@@ -103,7 +105,7 @@ def get_frequent_sourceIP_subnet(parsed_data, max_subnet):
         
     frequent_sourceIP, max_sourceip_count = Counter(ips_in_subnet).most_common(1)[0]
     return frequent_sourceIP, max_sourceip_count
-
+"""
 # ================= Step 5: Main Program and Output =================
 if __name__ == "__main__":  
     # 1. Parse file
@@ -143,3 +145,45 @@ if __name__ == "__main__":
         print(f"EVIDENCE[KEYPAD].COUNT=0")
         print(f"EVIDENCE[KEYPAD].SAMPLE=N/A")
         print(f"EVIDENCE[KEYPAD].MALFORMED_SKIPPED={malformed_skipped}")
+
+        """
+
+def solve_soc(data_dir: Path) -> PuzzleResult:
+    parsed_data, malformed_skipped, subnet_samples = read_file(data_dir / "auth.log")
+    subnet_list = get_subnets(parsed_data)
+    top24_tuple = top_subnet(subnet_list)
+
+    if top24_tuple[0]:
+        top24_str, top24_count = top24_tuple
+        frequent_ip, ip_count = get_frequent_sourceIP_subnet(parsed_data, top24_str)
+
+        if frequent_ip:
+            sample = subnet_samples.get(top24_str, "N/A")
+            L = int(frequent_ip.split('.')[-1])
+            keypad = f"{L}{top24_count}"
+
+            return PuzzleResult(
+                token_name="KEYPAD",
+                token_value=keypad,
+                evidence={
+                    "TOP24": top24_str,
+                    "COUNT": str(top24_count),
+                    "SAMPLE": sample,
+                    "MALFORMED_SKIPPED": str(malformed_skipped),
+                        },
+                )
+        else:
+            raise ValueError("No valid failed log entries found in the top subnet.")
+    else:
+        raise ValueError("No valid failed log entries found.")
+
+
+if __name__ == "__main__":
+        from escaperoom.utils import DATA_PATH
+        result = solve_soc(DATA_PATH)
+        print("[Room SOC] Scanning auth.log...")
+        print(f"TOKEN[KEYPAD]={result.token_value}")
+        print(f'EVIDENCE[KEYPAD].TOP24="{result.evidence["TOP24"]}"')
+        print(f"EVIDENCE[KEYPAD].COUNT={result.evidence['COUNT']}")
+        print(f'EVIDENCE[KEYPAD].SAMPLE="{result.evidence["SAMPLE"]}"')
+        print(f"EVIDENCE[KEYPAD].MALFORMED_SKIPPED={result.evidence['MALFORMED_SKIPPED']}")
