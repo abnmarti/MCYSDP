@@ -33,7 +33,8 @@ def is_valid_ipv4(ip_str):
         return True
     except ipaddress.AddressValueError:
         return False
-
+    
+_room_state = {"top_ip": None}
 
 # ================= Step 1: Read and Parse =================
 def read_file(input_file):
@@ -152,15 +153,18 @@ def solve_soc(data_dir: Path) -> PuzzleResult:
     parsed_data, malformed_skipped, subnet_samples = read_file(data_dir / "auth.log")
     subnet_list = get_subnets(parsed_data)
     top24_tuple = top_subnet(subnet_list)
+    _room_state["top_ip"] = None
 
     if top24_tuple[0]:
         top24_str, top24_count = top24_tuple
         frequent_ip, ip_count = get_frequent_sourceIP_subnet(parsed_data, top24_str)
 
         if frequent_ip:
+            _room_state["top_ip"] = frequent_ip
             sample = subnet_samples.get(top24_str, "N/A")
             L = int(frequent_ip.split('.')[-1])
             keypad = f"{L}{top24_count}"
+            
 
             return PuzzleResult(
                 token_name="KEYPAD",
@@ -181,7 +185,12 @@ def solve_soc(data_dir: Path) -> PuzzleResult:
 if __name__ == "__main__":
         from escaperoom.utils import DATA_PATH
         result = solve_soc(DATA_PATH)
-        print("[Room SOC] Scanning auth.log...")
+        top_ip = _room_state.get("top_ip", "N/A")
+        print("[Room SOC] Parsing logs...")
+        print(f"{result.evidence['COUNT']} failed attempts found in {result.evidence['TOP24']}")
+        print(f"Top IP is {top_ip} (last octet={top_ip.split('.')[-1]})")
+        print(f"Token formed: {result.token_value}")
+        print()
         print(f"TOKEN[KEYPAD]={result.token_value}")
         print(f'EVIDENCE[KEYPAD].TOP24="{result.evidence["TOP24"]}"')
         print(f"EVIDENCE[KEYPAD].COUNT={result.evidence['COUNT']}")
