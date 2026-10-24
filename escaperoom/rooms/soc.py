@@ -106,48 +106,6 @@ def get_frequent_sourceIP_subnet(parsed_data, max_subnet):
         
     frequent_sourceIP, max_sourceip_count = Counter(ips_in_subnet).most_common(1)[0]
     return frequent_sourceIP, max_sourceip_count
-"""
-# ================= Step 5: Main Program and Output =================
-if __name__ == "__main__":  
-    # 1. Parse file
-    parsed_data,malformed_skipped,subnet_samples = read_file(PATH_AUTH)
-    
-    # 2. Get subnet list
-    subnet_list = get_subnets(parsed_data)
-    
-    # 3. Find the TOP24 subnet
-    top24_tuple = top_subnet(subnet_list)
-    
-    if top24_tuple[0]:
-        top24_str, top24_count = top24_tuple
-        
-        # 4. Find the most frequent IP in this subnet
-        frequent_ip, ip_count = get_frequent_sourceIP_subnet(parsed_data, top24_str)
-        
-        if frequent_ip:
-            # 5. Extract the SAMPLE for this subnet (get the first valid sample from global variable)
-            sample = subnet_samples.get(top24_str, "N/A")
-            
-            # 6. Calculate KEYPAD (Last octet of IP + total count)
-            L = int(frequent_ip.split('.')[-1])
-            keypad = f"{L}{top24_count}"
-            
-            # 7. Output according to specification
-            print(f"TOKEN[KEYPAD]={keypad}")
-            print(f"EVIDENCE[KEYPAD].TOP24={top24_str}")
-            print(f"EVIDENCE[KEYPAD].COUNT={top24_count}")
-            print(f"EVIDENCE[KEYPAD].SAMPLE={sample}")
-            print(f"EVIDENCE[KEYPAD].MALFORMED_SKIPPED={malformed_skipped}")
-        else:
-            print("No valid failed log entries found in the top subnet.")
-    else:
-        print(f"TOKEN[KEYPAD]=N/A")
-        print(f"EVIDENCE[KEYPAD].TOP24=N/A")
-        print(f"EVIDENCE[KEYPAD].COUNT=0")
-        print(f"EVIDENCE[KEYPAD].SAMPLE=N/A")
-        print(f"EVIDENCE[KEYPAD].MALFORMED_SKIPPED={malformed_skipped}")
-
-        """
 
 def solve_soc(data_dir: Path) -> PuzzleResult:
     parsed_data, malformed_skipped, subnet_samples = read_file(data_dir / "auth.log")
@@ -180,19 +138,3 @@ def solve_soc(data_dir: Path) -> PuzzleResult:
             raise ValueError("No valid failed log entries found in the top subnet.")
     else:
         raise ValueError("No valid failed log entries found.")
-
-
-if __name__ == "__main__":
-        from escaperoom.utils import DATA_PATH
-        result = solve_soc(DATA_PATH)
-        top_ip = _room_state.get("top_ip", "N/A")
-        print("[Room SOC] Parsing logs...")
-        print(f"{result.evidence['COUNT']} failed attempts found in {result.evidence['TOP24']}")
-        print(f"Top IP is {top_ip} (last octet={top_ip.split('.')[-1]})")
-        print(f"Token formed: {result.token_value}")
-        print()
-        print(f"TOKEN[KEYPAD]={result.token_value}")
-        print(f'EVIDENCE[KEYPAD].TOP24="{result.evidence["TOP24"]}"')
-        print(f"EVIDENCE[KEYPAD].COUNT={result.evidence['COUNT']}")
-        print(f'EVIDENCE[KEYPAD].SAMPLE="{result.evidence["SAMPLE"]}"')
-        print(f"EVIDENCE[KEYPAD].MALFORMED_SKIPPED={result.evidence['MALFORMED_SKIPPED']}")
