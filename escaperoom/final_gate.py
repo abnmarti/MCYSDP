@@ -7,7 +7,8 @@ from escaperoom.models import FinalGateResult
 
 
 def solve_final_gate(data_dir: Path, tokens: Mapping[str, str]) -> FinalGateResult:
-    #Build the final message and its HMAC 
+    #Build the final message and its HMAC
+    print("Collected tokens: " + ", ".join(f"{name}={value}" for name, value in tokens.items()))
     config = {}
     with open(data_dir / "final_gate.txt", encoding="utf-8") as f:
         for line in f:

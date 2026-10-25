@@ -140,7 +140,7 @@ class EngineTests(unittest.TestCase):
             self.assertIsNone(engine.state.final_hmac)
 
 
-    def test_actual_group06_pack_starts_and_handles_pending_room_stub(self) -> None:
+    def test_actual_group06_pack_solves_soc_room(self) -> None:
         project_root = Path(__file__).resolve().parents[1]
         with tempfile.TemporaryDirectory() as tmp:
             transcript_path = Path(tmp) / "run.txt"
@@ -158,9 +158,10 @@ class EngineTests(unittest.TestCase):
                 check=False,
             )
             self.assertEqual(completed.returncode, 0, completed.stderr)
-            self.assertIn("[Integration pending]", completed.stdout)
+            self.assertIn("TOKEN[KEYPAD]=16654", completed.stdout)
             self.assertTrue(transcript_path.is_file())
             transcript = transcript_path.read_text(encoding="utf-8")
+            self.assertIn("TOKEN[KEYPAD]=16654", transcript)
             self.assertIn("FINAL_GATE=PENDING", transcript)
 
     def test_unknown_command_does_not_crash(self) -> None:
