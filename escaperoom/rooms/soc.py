@@ -122,7 +122,9 @@ def solve_soc(data_dir: Path) -> PuzzleResult:
             sample = subnet_samples.get(top24_str, "N/A")
             L = int(frequent_ip.split('.')[-1])
             keypad = f"{L}{top24_count}"
-            
+
+            print(f"{top24_count} failed attempts found in {top24_str}")
+            print(f"Top IP is {frequent_ip} (last octet={L})")  
 
             return PuzzleResult(
                 token_name="KEYPAD",
